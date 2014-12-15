@@ -7,6 +7,7 @@ require_relative 'lib/blogtastic.rb'
 
 class Blogtastic::Server < Sinatra::Application
   configure do
+    set :bind, '0.0.0.0'
     enable :sessions
     use Rack::Flash
   end
@@ -32,6 +33,8 @@ class Blogtastic::Server < Sinatra::Application
 
   get '/signup' do
     # TODO: render template with form for user to sign up
+
+  erb :'auth/signup'
   end
 
   post '/signup' do
@@ -39,10 +42,17 @@ class Blogtastic::Server < Sinatra::Application
     # Create the session by adding a new key value pair to the
     # session hash. The key should be 'user_id' and the value
     # should be the user id of the user who was just created.
+
+  db = Blogtastic.create_db_connection('blogtastic')
+  @user_data = Blogtastic::UsersRepo.save(db, params)
+  session['user_id'] = @user_data['id']
+
+  redirect to '/posts'
   end
 
   get '/signin' do
     # TODO: render template for user to sign in
+  erb :'auth/signin'
   end
 
   post '/signin' do
@@ -50,10 +60,19 @@ class Blogtastic::Server < Sinatra::Application
     # Create the session by adding a new key value pair to the
     # session hash. The key should be 'user_id' and the value
     # should be the user id of the user who just logged in.
+
+  db = Blogtastic.create_db_connection('blogtastic')
+  @user_login = Blogtastic::UsersRepo.find_by_name(db, params[:username])
+  session['user_id'] = @user_login['id']
+
+  redirect to '/posts'
   end
 
   get '/logout' do
     # TODO: destroy the session
+    session.delete('user_id')
+
+  redirect to '/signin'
   end
 
   ###################################################################
@@ -119,10 +138,18 @@ class Blogtastic::Server < Sinatra::Application
     redirect to '/posts/' + params[:post_id]
   end
 
+  # delete a comment on a post
+
+  delete 'comments/:id' do
+    db = Blogtastic.create_db_connection('blogtastic')
+    Blogtastic::CommentsRepo.destroy db, params[:id]
+    'delete comment'
+  end
+
   # delete a post
   delete '/posts/:id' do
     db = Blogtastic.create_db_connection 'blogtastic'
     Blogtastic::PostsRepo.destroy db, params[:id]
-    redirect to '/posts'
+    'redirect to '/posts''
   end
 end

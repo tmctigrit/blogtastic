@@ -1,24 +1,9 @@
 <div class='sixteen columns'>
-  Your task is to implement sessions in this app so that user can post posts and leave comments on posts with their own accounts. Right now everything is done anonymously and we all know what anonymous internet comments lead to...<br /><br />
-  
-  You'll need to do the following:
-  <ol>
-    <li>Complete endpoints for signing up</li>
-    <li>Complete endpoints for singing in</li>
-    <li>Complete ERB templates for singup and signin pages</li>
-    <li>Edit users repo to allow saving of user info</li>
-  </ol>
-  <br />
-  
-  If this is your first time running the app you'll need to do the following:
-  <ol>
-    <li>create a database in your VM called 'blogtastic'</li>
-    <li>load 'lib/blogtastic.rb' in IRB</li>
-    <li>run the method to create your tables</li>
-    <li>run the method to seed your database with the anonymous user</li>
-    <li>exit irb and get started!</li>
-  </ol>
-  <br />
-  
-  Click <a href='/posts'>here</a> to view all posts.
+<form method="POST" action="/signup">
+  <h3>Account Sign Up</h3>
+  <label>Name:</label><input type="text" id="username" name="username" />
+  <label>Password:</label><input type="text" id="password" name="password" />
+  <button>Let's go!</button>
+</form>
+
 </div>

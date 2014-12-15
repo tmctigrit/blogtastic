@@ -3,7 +3,7 @@
     <h4><%= @post['title'] %> by <%= @user['username'] %></h4>
     <%= @post['content'] %>
   </div>
-  
+
   <div class='eight columns omega aside-container'>
     <h4>Comments section</h4>
     <form action="/posts/<%= @post['id'] %>/comments" method='post'>
@@ -11,9 +11,14 @@
       <input type='hidden' name='user_id' value='<%= @current_user['id'] %>'>
       <input type='submit' value='Submit'>
     </form>
-  
+
     <% @comments.each do |comment| %>
-      <p><%= comment['user'] %>: <%= comment['content'] %></p>
+      <p><%= comment['user'] %>: <%= comment['content'] %>
+      <% if @current_user['username'] == comment['user'] %>
+        | <a href='/comments/<%= comment['id'] %>'> Delete Comment</a>
+      </p>
+      <%end %>
     <% end %>
+
   </div>
 </div><!-- end sixteen columnns -->
